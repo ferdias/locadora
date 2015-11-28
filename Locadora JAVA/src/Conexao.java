@@ -8,7 +8,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mysql.fabric.xmlrpc.base.Array;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 //Início da classe de conexão//
@@ -335,47 +334,53 @@ public class Conexao {
 		}
 	};
 
-	public Produtora buscarPorProdutora(String nomeProdutora) {
+	public List<Produtora> buscarPorProdutora(String nomeProdutora) {
 		try {
 			Connection conn;
 			Statement st;
 			ResultSet rs;
-			String comando = "select * from produtoras where pro_nome like '% " + nomeProdutora + "%'";
+			String comando = "select * from produtoras where pro_nome like '%" + nomeProdutora + "%'";
 			conn = Conexao.getConexaoMySQL();
 			st = conn.createStatement();
 			rs = st.executeQuery(comando);
+			List<Produtora> listaProdutora = new ArrayList<Produtora>();
 			Produtora produtora = new Produtora();
 			while (rs.next()) {
+				produtora = new Produtora();
 				produtora.setProId(rs.getInt(1));
 				produtora.setProNome(rs.getString(2));
 				produtora.setProSituacao(rs.getInt(3));
+				listaProdutora.add(produtora);
 			}
-			return produtora;
+			return listaProdutora;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return new Produtora();
+		return new ArrayList<Produtora>();
 	};
 
-	public Classificacao buscarPorClassificacao(String claDescricao) {
+	public List<Classificacao> buscarPorClassificacao(String claDescricao) {
 		try {
 			Connection conn;
 			Statement st;
 			ResultSet rs;
-			String comando = "select * from classificacao where cla_descricao like '% " + claDescricao + "%'";;
+			String comando = "select * from classificacao where cla_descricao like '%" + claDescricao + "%'";;
 			conn = Conexao.getConexaoMySQL();
 			st = conn.createStatement();
 			rs = st.executeQuery(comando);
-			Classificacao classificacao = new Classificacao();
+			List<Classificacao> listaClassificacao = new ArrayList<Classificacao>();
+			Classificacao classificacao;
 			while (rs.next()) {
+				classificacao = new Classificacao();
 				classificacao.setClaId(rs.getInt(1));
 				classificacao.setClaDescricao(rs.getString(2));
+				listaClassificacao.add(classificacao);
 			}
-			return classificacao;
+			return listaClassificacao;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return new Classificacao();
+		return new ArrayList<Classificacao>();
 
 	};
 

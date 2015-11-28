@@ -6,10 +6,8 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.ListSelectionModel;
+import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.JTable;
 import javax.swing.JTextArea;
 
 import java.awt.event.WindowAdapter;
@@ -18,6 +16,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 
+@SuppressWarnings("serial")
 public class JanelaProdutora extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
@@ -40,13 +39,14 @@ public class JanelaProdutora extends JDialog {
 	 * Create the dialog.
 	 */
 	public JanelaProdutora() {
+		setResizable(false);
 		setTitle("Produtoras");
 		addWindowListener(new WindowAdapter() {
 			@SuppressWarnings("static-access")
 			@Override
 			public void windowOpened(WindowEvent arg0) {
 				
-				txtListProdutora.append(" ATIVO |   ID   |  DESCRIÇÃO\n");
+				txtListProdutora.append(" ATIVO |    ID     |  DESCRIÇÃO\n");
 				
 				Conexao prod = new Conexao();			
 				List<Produtora> listaProdutoras =  prod.buscarTodosProdutoras();
@@ -72,6 +72,7 @@ public class JanelaProdutora extends JDialog {
 		
 		JButton btnAdicionar = new JButton("Adicionar");
 		btnAdicionar.addActionListener(new ActionListener() {
+			@SuppressWarnings("static-access")
 			public void actionPerformed(ActionEvent e) {
 				 JanelaFormProd form = new JanelaFormProd();
 				 form.setModal(true);
@@ -83,7 +84,7 @@ public class JanelaProdutora extends JDialog {
 					 prod.cadastrarProdutora(form.getObjSaida());
 					 
 					 txtListProdutora.setText("");
-					 txtListProdutora.append(" ATIVO |   ID   |  DESCRIÇÃO\n");				
+					 txtListProdutora.append(" ATIVO |    ID     |  DESCRIÇÃO\n");				
 					 List<Produtora> listaProdutoras =  prod.buscarTodosProdutoras();
 				 	 for (Produtora item : listaProdutoras) {
 				 		 String ativo;
@@ -105,6 +106,7 @@ public class JanelaProdutora extends JDialog {
 		
 		JButton btnNewButton = new JButton("Alterar");
 		btnNewButton.addActionListener(new ActionListener() {
+			@SuppressWarnings("static-access")
 			public void actionPerformed(ActionEvent e) {
 				String nome = null;
 				nome = JOptionPane.showInputDialog("Entre a ID para alteração");	
@@ -120,7 +122,7 @@ public class JanelaProdutora extends JDialog {
 						prod.alterarProdutora(form.getObjSaida());
 					 
 						txtListProdutora.setText("");
-						txtListProdutora.append(" ATIVO |   ID   |  DESCRIÇÃO\n");				
+						txtListProdutora.append(" ATIVO |    ID     |  DESCRIÇÃO\n");				
 						List<Produtora> listaProdutoras =  prod.buscarTodosProdutoras();
 					 	 for (Produtora item : listaProdutoras) {
 					 		 String ativo;
@@ -138,22 +140,23 @@ public class JanelaProdutora extends JDialog {
 				}
 			}
 		});
-		btnNewButton.setBounds(333, 33, 89, 23);
+		btnNewButton.setBounds(333, 34, 89, 23);
 		contentPanel.add(btnNewButton);
 		
 		JButton btnExcluir = new JButton("Excluir");
 		btnExcluir.addActionListener(new ActionListener() {
+			@SuppressWarnings("static-access")
 			public void actionPerformed(ActionEvent e) {
 				String nome = null;
 				nome = JOptionPane.showInputDialog("Entre a ID para alteração");	
 				
 				if (nome != null && 
-					JOptionPane.showConfirmDialog(null,"Você realmente quer excluir o ID" + nome) == 0){
+					JOptionPane.showConfirmDialog(null,"Você realmente quer excluir o ID" + nome,"Excluir",JOptionPane.YES_NO_OPTION) == 0){
 		
 					Conexao prod = new Conexao();
 					if (prod.deletarProdutora(Integer.parseInt(nome))) {
 						txtListProdutora.setText("");
-						txtListProdutora.append(" ATIVO |   ID   |  DESCRIÇÃO\n");				
+						txtListProdutora.append(" ATIVO |    ID     |  DESCRIÇÃO\n");				
 						List<Produtora> listaProdutoras =  prod.buscarTodosProdutoras();
 					 	 for (Produtora item : listaProdutoras) {
 					 		 String ativo;
@@ -173,11 +176,58 @@ public class JanelaProdutora extends JDialog {
 				}				
 			}
 		});
-		btnExcluir.setBounds(333, 55, 89, 23);
+		btnExcluir.setBounds(333, 57, 89, 23);
 		contentPanel.add(btnExcluir);
 		
-		txtListProdutora.setBounds(0, 0, 323, 229);
-		contentPanel.add(txtListProdutora);
+		JButton btnFiltrar = new JButton("Filtrar");
+		btnFiltrar.addActionListener(new ActionListener() {
+			@SuppressWarnings("static-access")
+			public void actionPerformed(ActionEvent e) {
+				String pesq = null;
+				pesq = JOptionPane.showInputDialog("Entre com os dados para filtragem.");
+				
+				Conexao prod = new Conexao();
+				
+				if (pesq == null || pesq.equals("")){
+					txtListProdutora.setText("");
+					txtListProdutora.append(" ATIVO |    ID     |  DESCRIÇÃO\n");				
+					List<Produtora> listaProdutoras =  prod.buscarTodosProdutoras();
+				 	 for (Produtora item : listaProdutoras) {
+				 		 String ativo;
+				 		 if (item.getProSituacao() == 1){
+				 			 ativo = "X";
+				 		 }
+				 		 else{
+				 			 ativo = "  ";
+				 		 }
+				   		 txtListProdutora.append("     " + ativo +"      |    " + item.getProId() + "    | " + item.getProNome() +" \n");
+					}
+				}
+				else{		
+					txtListProdutora.setText("");
+					txtListProdutora.append(" ATIVO |    ID     |  DESCRIÇÃO\n");				
+					List<Produtora> listaProdutoras =  prod.buscarPorProdutora(pesq);
+				 	 for (Produtora item : listaProdutoras) {
+				 		 String ativo;
+				 		 if (item.getProSituacao() == 1){
+				 			 ativo = "X";
+				 		 }
+				 		 else{
+				 			 ativo = "  ";
+				 		 }
+				   		 txtListProdutora.append("     " + ativo +"      |    " + item.getProId() + "    | " + item.getProNome() +" \n");
+					}				 
+				}
+				
+				prod.FecharConexao();	
+			}
+		});
+		btnFiltrar.setBounds(333, 80, 89, 23);
+		contentPanel.add(btnFiltrar);
+		
+		JScrollPane scroll = new JScrollPane(txtListProdutora);
+		scroll.setBounds(0, 0, 323, 229);
+		contentPanel.add(scroll);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));

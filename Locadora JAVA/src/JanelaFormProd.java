@@ -3,7 +3,6 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -21,6 +20,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
 
+@SuppressWarnings("serial")
 public class JanelaFormProd extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
@@ -49,6 +49,7 @@ public class JanelaFormProd extends JDialog {
 	 * Create the dialog.
 	 */
 	public JanelaFormProd() {
+		setResizable(false);
 		getContentPane().setMaximumSize(new Dimension(20, 2147483647));
 		setTitle("Produtora");
 		setBounds(100, 100, 469, 143);
@@ -137,6 +138,7 @@ public class JanelaFormProd extends JDialog {
 		}
 	}
 	
+	@SuppressWarnings("static-access")
 	public JanelaFormProd(Integer IdItem) {
 		Conexao prod = new Conexao();
 		Produtora alteraItem = prod.buscarPorProdutoraId(IdItem);

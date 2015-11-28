@@ -9,15 +9,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 
+@SuppressWarnings("serial")
 public class JanelaFormClas extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
@@ -45,6 +44,7 @@ public class JanelaFormClas extends JDialog {
 	 * Create the dialog.
 	 */
 	public JanelaFormClas() {
+		setResizable(false);
 		getContentPane().setMaximumSize(new Dimension(20, 2147483647));
 		setTitle("Classifica\u00E7\u00E3o");
 		setBounds(100, 100, 469, 143);
@@ -109,6 +109,7 @@ public class JanelaFormClas extends JDialog {
 		}
 	}
 	
+	@SuppressWarnings("static-access")
 	public JanelaFormClas(Integer IdItem) {
 		Conexao prod = new Conexao();
 		Classificacao alteraItem = prod.buscarPorClassificacaoId(IdItem);
