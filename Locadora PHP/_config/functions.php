@@ -15,7 +15,7 @@ function alugaDvd($alu_cli_id, $dvds_id = array()){
 	//Obtem as Id's de cada item de dvd da array
 	$i = 0;
 	foreach($dvds_id as $dvd) {
-		$dvd_id[$i] = $dvd[0]; // INFO 1 necessária
+		$dvd_id[$i] = $dvd; // INFO 1 necessária
 		
 		//busca preço de aluguel de cada dvd
 		$mysql = new conexao;
@@ -165,7 +165,6 @@ function cadastraDvd($dvd_nome, $dvd_cla_id, $dvd_pro_id, $dvd_data_lancamento, 
 		return 0;
 	} else {
 		
-		$dvd_situacao = (isset($_POST['dvd_situacao'])) ? 1 : 0;
 		$dvd_codigo_interno = geraRand(5);
 		
 		$mysql = new conexao;

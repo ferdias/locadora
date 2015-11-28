@@ -17,6 +17,7 @@
 	if ($_POST['alugar-dvd'] == "Alugar"){
 		
 		$cli_id = $_POST['cli_id'];
+		
 		$dvds_id = array();
 		$dvds_id = $_POST['dvd_id'];
 		

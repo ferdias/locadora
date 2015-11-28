@@ -21,8 +21,7 @@
 								   DVD.dvd_codigo_interno,
 								   DVD.dvd_preco_custo,
 								   DVD.dvd_preco_aluguel,
-								   DVD.dvd_sinopse,
-								   DVD.dvd_situacao
+								   DVD.dvd_sinopse
 							  FROM dvds DVD, classificacao CLA, produtoras PRO
 							 WHERE DVD.dvd_cla_id = CLA.cla_id AND
 								   DVD.dvd_pro_id = PRO.pro_id AND
@@ -54,7 +53,6 @@
 		$dvd_preco_custo = $dvd->dvd_preco_custo;
 		$dvd_preco_aluguel = $dvd->dvd_preco_aluguel;
 		$dvd_sinopse = $dvd->dvd_sinopse;
-		$dvd_situacao = $dvd->dvd_situacao;
 	}
 	
 	//Atualiza DVD
@@ -67,9 +65,8 @@
 		$dvd_preco_custo_up = cleanString($_POST['dvd_preco_custo']);
 		$dvd_preco_aluguel_up = cleanString($_POST['dvd_preco_aluguel']);
 		$dvd_sinopse_up = cleanString($_POST['dvd_sinopse']);
-		$dvd_situacao_up = cleanString($_POST['dvd_situacao']);
 
-		$returnAtualizaDvd = atualizaDvd($cod, $dvd_nome_up, $dvd_cla_id_up, $dvd_pro_id_up, $dvd_data_lancamento_up, $dvd_preco_custo_up, $dvd_preco_aluguel_up, $dvd_sinopse_up, $dvd_situacao_up);
+		$returnAtualizaDvd = atualizaDvd($cod, $dvd_nome_up, $dvd_cla_id_up, $dvd_pro_id_up, $dvd_data_lancamento_up, $dvd_preco_custo_up, $dvd_preco_aluguel_up, $dvd_sinopse_up);
 			
 		if ($returnAtualizaDvd == 1){
 			echo "<script>alert('DVD atualizado com sucesso!');</script>";
@@ -184,11 +181,6 @@
 			
 			<div class="col-md-6">
 			
-				<div class="input-group more-b10 more-t30">
-					<input type="checkbox" name="dvd_situacao" id="dvd_situacao" value="1" value="<?php if ($dvd_situacao == 1) echo "1";?>" <?php if ($dvd_situacao == 1) echo "checked";?>>
-					<label>Ativo</label>
-				</div>
-				
 				<div class="input-group more-b10">
 				  <label>Preço de custo *</label>
 				  <input type="text" class="form-control" name="dvd_preco_custo"  id="dvd_preco_custo" value="<?php if (!empty($dvd_preco_custo)) echo $dvd_preco_custo; ?>" maxlength="10">

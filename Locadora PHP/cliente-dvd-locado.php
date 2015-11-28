@@ -72,7 +72,7 @@
 		$mysql->desconecta;
 		
 		foreach ($dvd_id as $dvd){
-			$devolver_dvd_id = $dvd[0];
+			$devolver_dvd_id = $dvd;
 			
 			//Atualiza a quantidade de dias de atraso
 			$mysql = new conexao;

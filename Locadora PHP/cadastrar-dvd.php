@@ -19,7 +19,7 @@
 		$dvd_data_lancamento = cleanString($_POST['dvd_data_lancamento']);
 		$dvd_preco_custo = cleanString($_POST['dvd_preco_custo']);
 		$dvd_preco_aluguel = cleanString($_POST['dvd_preco_aluguel']);
-		$dvd_situacao = cleanString($_POST['dvd_situacao']);
+		$dvd_situacao = 1;
 		$dvd_sinopse = cleanString($_POST['dvd_sinopse']);
 		
 		$returnCadastraDvd = cadastraDvd($dvd_nome, $dvd_cla_id, $dvd_pro_id, $dvd_data_lancamento, $dvd_preco_custo, $dvd_preco_aluguel, $dvd_situacao, $dvd_sinopse);
@@ -118,11 +118,6 @@
 		
 		<div class="col-md-6">
 		
-			<div class="input-group more-b10 more-t30">
-				<input type="checkbox" name="dvd_situacao" id="dvd_situacao" value="1" checked>
-				<label>Ativo</label>
-			</div>
-			
 			<div class="input-group more-b10">
 			  <label>Preço de custo *</label>
 			  <input type="text" class="form-control" name="dvd_preco_custo"  id="dvd_preco_custo" value="<?php if (!empty($dvd_preco_custo)) echo $dvd_preco_custo; ?>" maxlength="10">
