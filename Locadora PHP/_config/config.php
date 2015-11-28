@@ -1,5 +1,5 @@
 <?php
 	$nomeSite = "Locadora - Lodito Filmes";
-	$dominio = "http://localhost/faculdade/minierplocadora/";
+	$dominio = "http://54.207.93.174/faculdade/minierplocadora/";
 	
 ?>

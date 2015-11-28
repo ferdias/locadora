@@ -40,7 +40,7 @@
         <p><a class="btn btn-lg btn-success" href="alugar.php" role="button">ALUGAR DVD</a></p>
       </div>
 
-	  <h1 class="chamada-texto">Últimos filmes cadastrados</h1>
+	  <h1 class="chamada-texto">Alguns de nossos filmes disponíveis</h1>
 
       <div class="row">
         

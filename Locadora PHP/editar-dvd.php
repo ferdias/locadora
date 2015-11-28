@@ -83,13 +83,14 @@
 	
 	//Se pressionado o botão excluir, exclui cliente
 	if ($_POST['excluir-dvd'] == "Excluir"){
+		
 		$mysql = new conexao;
 		$deletaCliente = $mysql->sql_query("DELETE FROM dvds WHERE dvd_codigo_interno = ".$cod);
 		$mysql->desconecta;
 		
 		if($deletaCliente){
 			echo "<script>alert('DVD deletado com sucesso!');</script>";
-			echo "<script>window.location.href = 'dvds.php';;</script>";
+			echo "<script>window.location.href = 'dvds.php';</script>";
 		}
 	}
 	
@@ -125,7 +126,7 @@
 	  
 	  <p class="more-b20"><strong>Código interno:</strong> <?php echo $dvd_codigo_interno;?></p>
 	  
-	  <form action="editar-dvd.php" name="editar-dvd" method="POST">
+	  <form action="" name="editar-dvd" method="POST">
 	  
 		  <div class="row">
 		  
@@ -214,7 +215,7 @@
 		  <em>Campos marcados com (*) são obrigatórios!</em><br>
 		
 		  <input type="submit" class="btn more-t20 more-r20btn-lg" role="button" name="atualizar-dvd" value="Atualizar">
-		  <input class="btn btn-danger" type="submit" name="excluir-dvd" value="Excluir" style="margin-top: 20px;">
+		  <input class="btn btn-danger" type="submit" name="excluir-dvd" value="Excluir" style="margin-top: 20px;"/>
 	  </form>
 	
 	<!-- footer -->

@@ -14,20 +14,22 @@
 										FROM clientes CLI WHERE CLI.cli_situacao = 1 ORDER BY CLI.cli_nome DESC");
 	$mysql->desconecta;
 	
+	
 	if ($_POST['alugar-dvd'] == "Alugar"){
 		
-		$cli_id = $_POST['cli_id'];
 		$dvds_id = array();
 		$dvds_id = $_POST['dvd_id'];
 		
-		if (empty($dvds_id)){
-			echo "<script>alert('Selecione ao menos um DVD e um Cliente para efetuar a locação!')</script>";
-		} else{
-			//Função de aluguel de DVD
-			echo alugaDvd($cli_id, $dvds_id);
-			header("location: dvds-locados.php");
+		$i = 0;
+		echo "DVD's: <br>";
+		foreach($dvds_id as $dvd) {
+			$dvd_id[$i] = $dvd[0];
+			echo $dvd_id[$i]."<br>";
+			$i++;
 		}
 		
+		$cli_id = "<br><br>Cliente: ".$_POST['cli_id'];
+		echo $cli_id."<br>";
 	}
 
 		
@@ -59,7 +61,7 @@
 
 		
 	  <h2 class="more-t50 more-b30">
-		<span class="more-r10">Alugar DVD &nbsp;&nbsp;<span style="font-size: 14px;"><a href="dvds-locados.php">DVD's locados →</a></span></span>
+		<span class="more-r10">Alugar DVD</span>
 	  </h2>
 	  
 	  <form action="" name="form-loca-dvd" method="POST">

@@ -4,6 +4,7 @@
 	  <ul class="nav nav-justified">
 		<li<?php if($pagina == "index") echo ' class="active"';?>><a href="<?php echo $dominio;?>">Início</a></li>
 		<li<?php if($pagina == "alugar") echo ' class="active"';?>><a href="alugar.php">Alugar</a></li>
+		<li<?php if($pagina == "dvds-locados") echo ' class="active"';?>><a href="dvds-locados.php">DVD's Locados</a></li>
 		<li<?php if($pagina == "dvds") echo ' class="active"';?>><a href="dvds.php">DVD's</a></li>
 		<li<?php if($pagina == "clientes") echo ' class="active"';?>><a href="clientes.php">Clientes</a></li>
 	  </ul>

@@ -2,6 +2,128 @@
 
 include_once("mysql_class.php");
 
+/* Aluga DVD
+**/
+function alugaDvd($alu_cli_id, $dvds_id = array()){
+	
+	$alu_data_aluguel = dataHoraAtual();
+	$alu_data_recebimento = dataHoraRecebimento(2); //estabelece a devolução em 2 dias
+	$alu_preco_total = 0;
+	$alu_preco_desconto = 0;
+	$alu_preco_liquido = 0;
+	
+	//Obtem as Id's de cada item de dvd da array
+	$i = 0;
+	foreach($dvds_id as $dvd) {
+		$dvd_id[$i] = $dvd[0]; // INFO 1 necessária
+		
+		//busca preço de aluguel de cada dvd
+		$mysql = new conexao;
+		$buscaInfoDvd = $mysql->sql_query("SELECT DVD.dvd_preco_aluguel FROM dvds DVD WHERE DVD.dvd_id = ".$dvd_id[$i]) OR die(mysql_error());
+		$mysql->desconecta;
+		
+		if ($buscaInfoDvd){
+			while($dvd = mysql_fetch_object($buscaInfoDvd)){ 
+				$dvd_preco_aluguel[$i] = $dvd->dvd_preco_aluguel; //INFO 2 necessária
+				$alu_preco_total = $alu_preco_total + $dvd_preco_aluguel[$i]; //INFO 3 necessária
+			}
+		} else {
+			return "Não foi possível encontrar os preços de aluguel dos DVD's";
+		}
+		
+		$i++;
+	}
+	
+	//Verifica se cliente tem desconto
+	$mysql = new conexao;
+	$descontoCliente = $mysql->sql_query("SELECT
+										  CLI.cli_percentual_desconto
+										FROM
+										  clientes CLI
+										WHERE CLI.cli_id = ".$alu_cli_id) OR die(mysql_error());
+	$mysql->desconecta;
+	
+	if($descontoCliente){
+		while($desconto = mysql_fetch_object($descontoCliente)){ 
+			$cli_percentual_desconto = $desconto->cli_percentual_desconto;		
+		}
+		
+		$alu_preco_desconto = $alu_preco_total * ($cli_percentual_desconto / 100); //INFO 4 necessária
+		$alu_preco_liquido = $alu_preco_total - $alu_preco_desconto;
+		
+	} else {
+		return "Não foi possível buscar o desconto do cliente";
+	}
+	
+	//Insere dados na tabela aluguel
+	$mysql = new conexao;
+	$buscaInfoDvd = $mysql->sql_query("INSERT INTO aluguel (
+												alu_cli_id, 
+												alu_data_aluguel, 
+												alu_data_recebimento,
+												alu_preco_total,
+												alu_preco_desconto,
+												alu_preco_liquido) VALUES (
+												".$alu_cli_id.",
+												'".$alu_data_aluguel."',
+												'".$alu_data_recebimento."',
+												".$alu_preco_total.",
+												".$alu_preco_desconto.",
+												".$alu_preco_liquido.")") OR die(mysql_error());
+	$mysql->desconecta;
+
+	
+	if($buscaInfoDvd){
+		//Obtem id do aluguel inserido
+		$mysql = new conexao;
+		$pegaIdAluguel = $mysql->sql_query("SELECT ALU.alu_id FROM aluguel ALU ORDER BY ALU.alu_id DESC LIMIT 0,1") OR die(mysql_error());
+		$mysql->desconecta;
+		
+		if ($pegaIdAluguel){
+			while($id_aluguel = mysql_fetch_object($pegaIdAluguel)){ 
+				$alui_alu_id = $id_aluguel->alu_id;
+			}
+			
+			//inserir registro de DVD alugado
+			for ($j=0;$j<$i; $j++){
+				
+				$alui_preco_total = $dvd_preco_aluguel[$j];
+				
+				$mysql = new conexao;
+				$inserirItemAluguel = $mysql->sql_query("INSERT INTO aluguel_itens (
+															alui_alu_id,
+															alui_dvd_id,
+															alui_quantidade,
+															alui_preco_aluguel,
+															alui_preco_total) VALUES (
+															".$alui_alu_id.",
+															".$dvd_id[$j].",
+															1,
+															".$dvd_preco_aluguel[$j].",
+															".$alui_preco_total.")") OR die(mysql_error());
+				$mysql->desconecta;
+				
+				if($inserirItemAluguel){
+					$mysql = new conexao;
+					$atualizaDvd = $mysql->sql_query("UPDATE dvds SET 
+															dvd_situacao = 0
+															WHERE dvd_id = ".$dvd_id[$j]) OR die(mysql_error());
+					$mysql->desconecta;
+				}
+				
+			} // fim for
+			
+			if ($atualizaDvd) utf8_decode("<script>alert('DVD locado com sucesso com sucesso!');</script>");
+		} else {
+			return "Erro ao obter ID da tabela aluguel";
+		}
+		
+	} else {
+		return "Erro ao buscar informações do DVD";
+	}
+	
+}
+
 /* Atualiza DVD
 **/
 function atualizaDvd($dvd_codigo_interno, $dvd_nome, $dvd_cla_id, $dvd_pro_id, $dvd_data_lancamento, $dvd_preco_custo, $dvd_preco_aluguel, $dvd_sinopse, $dvd_situacao){
@@ -152,6 +274,12 @@ function cadastraCliente($cli_nome, $cli_data_nascimento, $cli_situacao, $cli_pe
 **/
 function dataHoraAtual() {
 	return date ("Y-m-d H:i:s");
+}
+
+/* Retorna dataHora com dias a mais ou a menos
+**/
+function dataHoraRecebimento($dias) {
+	return date ("Y-m-d H:i:s", strtotime($dias." days"));
 }
 
 /* Criar Slug. Ex: Teste do João => teste-do-joao
